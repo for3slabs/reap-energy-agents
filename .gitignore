@@ -1,0 +1,29 @@
+# secrets: every .env except the examples
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# node / next
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# foundry
+packages/contracts/out/
+packages/contracts/cache/
+packages/contracts/broadcast/
+
+.DS_Store
+.playwright-mcp/

@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Instrument palette. Warm neutrals like a meter housing; color carries STATE only.
+   Light theme on purpose: maintenance chief on the plant floor under harsh lighting. */
+:root {
+  --surface: oklch(0.965 0.007 85);
+  --panel: oklch(0.992 0.004 85);
+  --panel-2: oklch(0.945 0.009 85);
+  --line: oklch(0.86 0.01 85);
+  --line-strong: oklch(0.72 0.012 85);
+  --ink: oklch(0.21 0.014 85);
+  --ink-2: oklch(0.38 0.014 85);
+  --muted: oklch(0.5 0.013 85);
+
+  --safety: oklch(0.87 0.165 95); /* industrial safety yellow */
+  --safety-deep: oklch(0.78 0.16 88);
+  --on-safety: oklch(0.2 0.03 85);
+
+  --ok: oklch(0.52 0.12 152);
+  --ok-tint: oklch(0.95 0.035 152);
+  --warn: oklch(0.62 0.15 62);
+  --warn-tint: oklch(0.95 0.045 75);
+  --fault: oklch(0.53 0.19 28);
+  --fault-tint: oklch(0.95 0.035 28);
+  --off: oklch(0.52 0.035 250);
+  --off-tint: oklch(0.94 0.012 250);
+
+  --focus: oklch(0.55 0.16 250);
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-safety: var(--safety);
+  --color-safety-deep: var(--safety-deep);
+  --color-on-safety: var(--on-safety);
+  --color-ok: var(--ok);
+  --color-ok-tint: var(--ok-tint);
+  --color-warn: var(--warn);
+  --color-warn-tint: var(--warn-tint);
+  --color-fault: var(--fault);
+  --color-fault-tint: var(--fault-tint);
+  --color-off: var(--off);
+  --color-off-tint: var(--off-tint);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-martian);
+}
+
+html {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.readout {
+  font-family: var(--font-martian), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.label {
+  font-stretch: 85%;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-dot {
+  animation: pulse-dot 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200px 0;
+  }
+  to {
+    background-position: 200px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--panel-2) 0, var(--panel) 50%, var(--panel-2) 100%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot,
+  .skeleton {
+    animation: none;
+  }
+}
