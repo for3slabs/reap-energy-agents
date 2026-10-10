@@ -1,7 +1,8 @@
 // Typed client for apps/api. Every call that creates something on Reap carries an idempotency key
 // generated ONCE per logical operation and reused on retry, so a double click never charges twice.
 
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8811").replace(/\/$/, "");
+// Same-origin by default: next.config.ts proxies /api to the agent API (AGENT_API_ORIGIN).
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
 
 export type MachineState = "FUNCIONA" | "NO_FUNCIONA" | "DEFECTO" | "FALLA";
 
@@ -117,8 +118,10 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
       ...init,
       headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
       cache: "no-store",
+      signal: init?.signal ?? AbortSignal.timeout(45_000), // never hang the console on a dead request
     });
-  } catch {
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "TimeoutError") throw new ApiError(0, "TIMEOUT", "La API del agente no respondió en 45 s");
     throw new ApiError(0, "NETWORK", "No se pudo contactar a la API del agente");
   }
   const body = await res.json().catch(() => ({}));

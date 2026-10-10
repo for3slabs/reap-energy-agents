@@ -118,10 +118,19 @@ export function Console() {
         </div>
       </header>
 
-      {apiDown && (
-        <div className="border-b border-fault/30 bg-fault-tint px-4 py-3 text-sm text-fault md:px-6" role="alert">
-          {apiDown}. Revisa que la API esté arriba y que <code className="readout">NEXT_PUBLIC_API_URL</code> apunte a ella.
+      {apiDown && !machines && (
+        <div className="flex flex-wrap items-center gap-3 border-b border-fault/30 bg-fault-tint px-4 py-3 text-sm text-fault md:px-6" role="alert">
+          <span>{apiDown}.</span>
+          <button className="rounded-sm border border-fault/40 px-2 py-1 font-semibold" onClick={refresh}>
+            Reintentar
+          </button>
         </div>
+      )}
+      {!machines && !apiDown && (
+        <p className="mx-auto max-w-7xl px-4 pt-5 text-sm text-ink-2 md:px-6" role="status">
+          <span className="live-dot mr-2 inline-block h-2 w-2 rounded-full bg-ink align-middle" aria-hidden />
+          Conectando con el agente. La primera visita despierta la API y puede tardar unos segundos.
+        </p>
       )}
 
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 md:px-6 lg:grid-cols-[22rem_1fr]">
